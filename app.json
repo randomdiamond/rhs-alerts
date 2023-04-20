@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "scheme": "acme",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "rhs-alerts",
+    "slug": "rhs-alerts"
+  }
+}
