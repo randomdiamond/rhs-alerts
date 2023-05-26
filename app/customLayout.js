@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Touchable } from 'react-native';
 import { Slot, Link, usePathname, useRouter } from 'expo-router';
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { UserContext } from './userContext';
+
+
 
 
 export default function CustomLayout() {

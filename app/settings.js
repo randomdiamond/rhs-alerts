@@ -4,11 +4,11 @@ import { Link, Stack, useRouter } from "expo-router";
 import { FontAwesome5 } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
-import { UserContext } from './userContext';
-import { color } from "react-native-reanimated";
+import { useUserContext } from './userContext';
+
 export default function Settings() {
 
-    const { userData, setUserData } = useContext(UserContext);
+    const { userData, setUserData } = useUserContext()
     const router = useRouter()
 
 

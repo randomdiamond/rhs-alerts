@@ -3,12 +3,19 @@ import { useRouter } from "expo-router";
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
+import { useUserContext } from './userContext';
 
 export default function JahrgangSelection() {
+
+    const { userData, setUserData } = useUserContext()
     const router = useRouter();
 
     function handleJahrgangSelect(jahrgang) {
-        router.push({ pathname: 'klasseSelection', params: { jahrgang: jahrgang } })
+        setUserData(prevState => ({
+            ...prevState,
+            jahrgang,
+        }));
+        router.push('/klasseSelection')
     };
     function fetchFonts() {
         return Font.loadAsync({

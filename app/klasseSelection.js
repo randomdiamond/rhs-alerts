@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Stack, useRouter, usePathname, useSearchParams } from "expo-router";
+import { useRouter } from "expo-router";
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-export default function JahrgangSelection() {
+import { useUserContext } from './userContext';
+
+export default function KlasseSelection() {
     const router = useRouter();
-    const params = useSearchParams();
+    console.log(router)
+    const { userData, setUserData } = useUserContext()
+    console.log(userData)
+
     async function handleKlasseSelect(klasse) {
         try {
-            const data = {
-                jahrgang: params.jahrgang,
-                klasse: klasse,
+            const newUserData = {
+                ...userData,
+                klasse,
             };
-            await AsyncStorage.setItem('userData', JSON.stringify(data));
+            setUserData(newUserData);
+
+            await AsyncStorage.setItem('userData', JSON.stringify(newUserData));
         } catch (error) {
             console.error('Error saving data:', error);
         }
@@ -24,8 +31,7 @@ export default function JahrgangSelection() {
             'Fredoka-SemiBold': require('./assets/fonts/FredokaOne-SemiBold.ttf'),
         });
     };
-    const pathname = usePathname();
-    console.log(pathname, "name")
+
 
     const [appIsReady, setAppIsReady] = useState(false);
 
@@ -59,7 +65,7 @@ export default function JahrgangSelection() {
                     key={klasse}
                     onPress={() => handleKlasseSelect(klasse)}
                 >
-                    <Text style={styles.klasseButtonText}>{`Klasse ${params.jahrgang + klasse}`}</Text>
+                    <Text style={styles.klasseButtonText}>{`Klasse ${userData.jahrgang + klasse}`}</Text>
                 </TouchableOpacity>
             ))}
         </View>
