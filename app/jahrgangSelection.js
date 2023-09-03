@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from "expo-router";
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import * as SplashScreen from 'expo-splash-screen';
-import * as Font from 'expo-font';
 import { useUserContext } from './userContext';
 
 export default function JahrgangSelection() {
@@ -15,42 +13,20 @@ export default function JahrgangSelection() {
             ...prevState,
             jahrgang,
         }));
-        router.push('/klasseSelection')
-    };
-    function fetchFonts() {
-        return Font.loadAsync({
-            'Fredoka-SemiBold': require('./assets/fonts/FredokaOne-SemiBold.ttf'),
-        });
-    };
-
-
-    const [appIsReady, setAppIsReady] = useState(false);
-
-    useEffect(() => {
-        async function prepare() {
-            try {
-                await SplashScreen.preventAutoHideAsync();
-                await fetchFonts();
-
-            } catch (e) {
-                console.warn(e);
-            } finally {
-                setAppIsReady(true);
-                (async () => await SplashScreen.hideAsync())()
-            }
+        if (jahrgang > 11) {
+            router.push('/kursSelection')
         }
-        prepare();
-    }, []);
+        else {
+            router.push('/klasseSelection')
+        }
+    };
 
-    if (!appIsReady) {
-        return null;
-    }
 
     return (
-        <View style={{ flex: 1, justifyContent: 'space-between', padding: 30, alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'space-around', padding: 30, alignItems: 'center' }}>
             <Text style={styles.jahrgangLabel}>Wähle deinen Jahrgang!</Text>
 
-            {Array.from({ length: 9 }, (_, i) => i + 5).map((jahrgang) => (
+            {Array.from({ length: 7 }, (_, i) => i + 5).map((jahrgang) => (
                 <TouchableOpacity
                     style={styles.jahrgangButton}
                     key={jahrgang}
@@ -64,27 +40,31 @@ export default function JahrgangSelection() {
 }
 const styles = StyleSheet.create({
     jahrgangButton: {
-        height: 53,
-        backgroundColor: '#acd2ff',
-        width: 180,
+        height: 60,
+        width: 250,
+        backgroundColor: '#91C4F0',
+        borderRadius: 29,
+        borderBottomWidth: 5,
+        borderRightWidth: 3,
+        borderColor: "#1B1B1B",
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 12,
+
 
     },
     jahrgangButtonText: {
-        color: '#0F2A52',
-        fontSize: 20,
+        color: '#1B1B1B',
+        fontSize: 22,
         fontFamily: 'Fredoka-SemiBold',
 
     },
     jahrgangLabel: {
-        fontFamily: 'Fredoka-SemiBold',
-        fontStyle: 'normal',
+        fontFamily: 'Poppins-Bold',
+
         fontSize: 32,
         textAlign: 'center',
-        color: '#0F2A52',
+        color: '#1B1B1B',
         padding: 20,
         paddingTop: 0,
     },

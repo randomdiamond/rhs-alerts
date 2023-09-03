@@ -1,22 +1,22 @@
-import { Link, Stack } from "expo-router";
-import { Text, View } from "react-native";
 
+import { useContext } from 'react';
+import VertretungsplanComponent from './VertretungsplanComponent';
+import { VertretungsplanContext } from "./vertretungsplanContext";
+import { UserContext } from "./userContext";
 
 
 export default function planPage() {
+
+
+    const { vertretungsplanData, setVertretungsplanData } = useContext(VertretungsplanContext)
+    const { userData, setUserData } = useContext(UserContext)
+    console.log(userData.jahrgang)
     return (
-        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-            <Stack.Screen
-                options={{
-                    title: "planPage",
-                }}
-            />
-
-            <Text>Home Screen</Text>
-
-            <Link href={{ pathname: "details", params: { name: "Bacon" } }}>
-                Go to Details
-            </Link>
-        </View>
+        <VertretungsplanComponent vertretungsplanData={vertretungsplanData} containNews={false} dataFilter={userData.jahrgang} />
     );
+
+
+
+
+
 }

@@ -26,37 +26,10 @@ export default function KlasseSelection() {
         }
         router.push("/")
     };
-    function fetchFonts() {
-        return Font.loadAsync({
-            'Fredoka-SemiBold': require('./assets/fonts/FredokaOne-SemiBold.ttf'),
-        });
-    };
 
-
-    const [appIsReady, setAppIsReady] = useState(false);
-
-    useEffect(() => {
-        async function prepare() {
-            try {
-                await SplashScreen.preventAutoHideAsync();
-                await fetchFonts();
-
-            } catch (e) {
-                console.warn(e);
-            } finally {
-                setAppIsReady(true);
-                (async () => await SplashScreen.hideAsync())()
-            }
-        }
-        prepare();
-    }, []);
-
-    if (!appIsReady) {
-        return null;
-    }
 
     return (
-        <View style={{ flex: 1, gap: 30, padding: 30, alignItems: 'center' }}>
+        <View style={{ flex: 1, gap: 20, padding: 30, alignItems: 'center' }}>
             <Text style={styles.klasseLabel}>Wähle deine Klasse</Text>
 
             {['A', 'B', 'C', 'D'].map((klasse) => (
@@ -74,27 +47,30 @@ export default function KlasseSelection() {
 }
 const styles = StyleSheet.create({
     klasseButton: {
-        height: 60,
-        backgroundColor: '#acd2ff',
-        width: 200,
+
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 12,
+        height: 60,
+        width: 250,
+        backgroundColor: '#91C4F0',
+        borderRadius: 29,
+        borderBottomWidth: 5,
+        borderRightWidth: 3,
+        borderColor: "#1B1B1B",
 
     },
     klasseButtonText: {
-        color: '#0F2A52',
-        fontSize: 20,
+        color: '#1B1B1B',
+        fontSize: 22,
         fontFamily: 'Fredoka-SemiBold',
 
     },
     klasseLabel: {
-        fontFamily: 'Fredoka-SemiBold',
-        fontStyle: 'normal',
+        fontFamily: 'Poppins-Bold',
         fontSize: 32,
         textAlign: 'center',
-        color: '#0F2A52',
+        color: '#1B1B1B',
         padding: 20,
         paddingTop: 0,
     },

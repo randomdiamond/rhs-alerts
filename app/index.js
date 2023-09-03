@@ -6,40 +6,36 @@ import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import LoadingComponent from "./loadingComponent";
 import { UserContext } from './userContext';
+import { VertretungsplanContext } from "./vertretungsplanContext";
+import axios from 'axios';
+import base64 from 'react-native-base64';
+import VertretungsplanComponent from "./VertretungsplanComponent";
 
 export default function Home() {
 
     const { userData, setUserData } = useContext(UserContext);
+    const { vertretungsplanData, setVertretungsplanData } = useContext(VertretungsplanContext);
     const [loading, setLoading] = useState(true);
     const [appIsReady, setAppIsReady] = useState(false);
-    function fetchFonts() {
-        return Font.loadAsync({
-            'Fredoka-SemiBold': require('./assets/fonts/FredokaOne-SemiBold.ttf'),
-        });
-    };
-
-
-
-
-
 
     useEffect(() => {
-        async function prepare() {
-            try {
-                await SplashScreen.preventAutoHideAsync();
-                await fetchFonts();
-            } catch (e) {
-                console.warn(e);
-            } finally {
-                setAppIsReady(true);
-                await SplashScreen.hideAsync();
-            }
-        }
-
         async function fetchData() {
             try {
-                const data = await AsyncStorage.getItem('userData');
+                if (vertretungsplanData === null) {
+                    //  Fetch vertretungsplan data from the API
+                    const username = 'vertretungsplan';
+                    const password = '18071864';
+                    const response = await axios.get('http://rhs-alerts.dsh.gg:8000', {
+                        headers: {
+                            'Authorization': 'Basic ' + base64.encode(username + ":" + password)
+                        }
+                    });
+                    console.log(response.data);
+                    setVertretungsplanData(response.data);
+                }
 
+                // Fetch userdata from AsyncStorage
+                const data = await AsyncStorage.getItem('userData');
                 if (data !== null) {
                     setUserData(JSON.parse(data));
                     console.log('Retrieved data:', data);
@@ -47,37 +43,26 @@ export default function Home() {
             } catch (error) {
                 console.error('Error retrieving data:', error);
             } finally {
-                setLoading(false);
+                setAppIsReady(true);
             }
         }
 
-        if (!appIsReady) {
-            prepare();
-        } else {
-            fetchData();
-        }
-    }, [appIsReady]);
 
-    if (!appIsReady || loading) {
+        fetchData();
+
+    }, []);
+
+    if (!appIsReady) {
         return <LoadingComponent />
     }
+
     if (userData === null) {
-        console.log(userData, "userData=null")
-        return <Redirect href="jahrgangSelection" />
+        console.log(userData, "userData=null");
+        return <Redirect href="jahrgangSelection" />;
     }
 
     return (
-
-        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#F8F8F8" }}>
-
-            <Stack.Screen
-                options={{
-                    title: "home",
-                }}
-            />
-            <Text style={{ fontFamily: "Fredoka-SemiBold" }}>Home Screen</Text>
-        </View>
-
+        <VertretungsplanComponent vertretungsplanData={vertretungsplanData} containNews={true} dataFilter={`${userData.jahrgang}${userData.klasse}`} />
     );
 }
 
